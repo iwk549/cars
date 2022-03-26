@@ -1,9 +1,14 @@
 import React, { useState } from "react";
-import { StyleSheet, TouchableOpacity, Modal, ScrollView } from "react-native";
+import {
+  StyleSheet,
+  TouchableOpacity,
+  Modal,
+  ScrollView,
+  View,
+} from "react-native";
 
 import AppText from "../text/AppText";
 import BlockButton from "../button/BlockButton";
-import ListItemSeparator from "../ListItemSeparator";
 import PageHeader from "../text/PageHeader";
 import { defaultStyles } from "../../../config";
 
@@ -35,23 +40,32 @@ function AppPicker({ options, selectedOption, placeholder, title, onSelect }) {
           />
           <PageHeader text={"Select " + title} />
           {options.map((o, idx) => {
-            const isSelected = o.value === selectedOption;
+            const isSelected = o.value === selectedOption.value;
             const itemStyle = idx % 2 === 0 ? {} : styles.oddItemStyle;
             return (
-              <TouchableOpacity
-                style={[
-                  styles.itemStyle,
-                  itemStyle,
-                  isSelected ? styles.selectedStyle : {},
-                ]}
-                onPress={() => {
-                  onSelect(o);
-                  setVisible(false);
-                }}
-              >
-                <AppText style={styles.text}>{o.label}</AppText>
-                <ListItemSeparator />
-              </TouchableOpacity>
+              <>
+                <TouchableOpacity
+                  style={[
+                    styles.itemStyle,
+                    itemStyle,
+                    isSelected ? styles.selectedStyle : {},
+                  ]}
+                  onPress={() => {
+                    onSelect(o);
+                    setVisible(false);
+                  }}
+                >
+                  <AppText
+                    style={[
+                      styles.text,
+                      isSelected ? styles.selectedStyle : {},
+                    ]}
+                  >
+                    {o.label}
+                  </AppText>
+                </TouchableOpacity>
+                <View style={{ height: 2 }} />
+              </>
             );
           })}
         </ScrollView>
@@ -66,7 +80,8 @@ const styles = StyleSheet.create({
   },
   itemStyle: {
     marginHorizontal: 10,
-    marginBottom: 15,
+    padding: 8,
+    borderRadius: 5,
   },
   modal: {
     flex: 1,
@@ -75,9 +90,12 @@ const styles = StyleSheet.create({
     margin: 5,
     borderRadius: 5,
   },
-  oddItemStyle: {},
+  oddItemStyle: {
+    backgroundColor: defaultStyles.colors.muted,
+  },
   selectedStyle: {
-    backgroundColor: defaultStyles.colors.light,
+    backgroundColor: defaultStyles.colors.primary,
+    color: defaultStyles.colors.lightText,
   },
   text: {
     textAlign: "center",

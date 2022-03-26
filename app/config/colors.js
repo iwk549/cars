@@ -11,4 +11,5 @@ export default {
   light: "#80ccff",
   lightText: "#fff",
   darkText: "#000",
+  muted: "#e6f5ff",
 };

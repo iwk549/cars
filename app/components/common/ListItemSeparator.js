@@ -9,9 +9,10 @@ function ListItemSeparator() {
 
 const styles = StyleSheet.create({
   container: {
-    height: 1,
-    backgroundColor: defaultStyles.colors.dark,
+    height: 2,
+    backgroundColor: defaultStyles.colors.primary,
     marginHorizontal: 20,
+    marginVertical: 5,
   },
 });
 

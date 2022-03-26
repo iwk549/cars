@@ -1,54 +1,64 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
-import { makes, models, getCars } from "../api/vehicles";
-import { years } from "../functions/misc";
-import { ListFilter, PageHeader, Screen } from "../components";
+import { makes, types, getCars } from "../api/vehicles";
+import { getRandomCarImage, years } from "../functions/misc";
+import { PageHeader, Screen } from "../components";
 import CarInList from "../components/carSearch/CarInList";
 import NoneFound from "../components/carSearch/NoneFound";
 import SearchFilter from "../components/carSearch/SearchFilter";
+import ListItemSeparator from "../components/common/ListItemSeparator";
+import ModelModal from "../components/carSearch/ModelModal";
 
 function CarSearch() {
   const [refreshing, setRefreshing] = useState(false);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
-  const [selectedModel, setSelectedModel] = useState(models[0]);
+  const [selectedType, setSelectedType] = useState(types[0]);
   const [selectedMake, setSelectedMake] = useState(makes[0]);
   const [selectedYear, setSelectedYear] = useState(years[0]);
+  const [selectedModel, setSelectedModel] = useState(null);
+  const [visible, setVisible] = useState(false);
 
   useEffect(() => {
-    getData(selectedModel, selectedMake, selectedYear);
+    getData(selectedType, selectedMake, selectedYear);
   }, []);
 
-  const handleSelectModel = (model) => {
-    setSelectedModel(model);
+  const handleSelectType = (model) => {
+    setSelectedType(model);
     getData(model, selectedMake, selectedYear);
   };
 
   const handleSelectMake = (make) => {
     setSelectedMake(make);
-    getData(selectedModel, make, selectedYear);
+    getData(selectedType, make, selectedYear);
   };
 
   const handleSelectYear = (year) => {
     setSelectedYear(year);
-    getData(selectedModel, selectedMake, year);
+    getData(selectedType, selectedMake, year);
   };
 
   const getData = async (model, make, year) => {
     setRefreshing(true);
     const res = await getCars(model, make, year);
     if (res.ok) {
-      setFilteredVehicles(res.data.Results);
+      let data = [];
+      res.data.Results.forEach((r) => {
+        let result = { ...r };
+        result.image = getRandomCarImage();
+        data.push(result);
+      });
+      setFilteredVehicles(data);
     }
     setRefreshing(false);
   };
 
   const filters = [
     {
-      title: "Model",
-      options: models,
-      onSelect: handleSelectModel,
-      selectedItem: selectedModel,
+      title: "Type",
+      options: types,
+      onSelect: handleSelectType,
+      selectedItem: selectedType,
     },
     {
       title: "Make",
@@ -64,9 +74,14 @@ function CarSearch() {
     },
   ];
 
+  const handleSelectModel = (car) => {
+    setSelectedModel(car);
+    setVisible(true);
+  };
+
   return (
     <Screen>
-      <PageHeader text="Search Cars" />
+      <PageHeader text="Filter Cars" />
       <View style={styles.row}>
         {filters.map((f) => (
           <View style={styles.third} key={f.title}>
@@ -79,16 +94,27 @@ function CarSearch() {
           </View>
         ))}
       </View>
-      {filteredVehicles.length > 0 ? (
-        <FlatList
-          data={filteredVehicles}
-          keyExtractor={(v) => String(v.Model_ID)}
-          renderItem={({ item }) => <CarInList car={item} />}
-          refreshing={refreshing}
-          onRefresh={() => getData(selectedModel, selectedMake, selectedYear)}
-          ListEmptyComponent={<NoneFound />}
-        />
-      ) : null}
+      <PageHeader text="Select Model" />
+      <FlatList
+        data={filteredVehicles}
+        keyExtractor={(v) => String(v.Model_ID)}
+        renderItem={({ item, index }) => (
+          <CarInList
+            car={item}
+            isEven={index % 2 === 0}
+            onSelect={handleSelectModel}
+          />
+        )}
+        refreshing={refreshing}
+        onRefresh={() => getData(selectedType, selectedMake, selectedYear)}
+        ItemSeparatorComponent={ListItemSeparator}
+        ListEmptyComponent={<NoneFound />}
+      />
+      <ModelModal
+        model={selectedModel}
+        visible={visible}
+        setVisible={setVisible}
+      />
     </Screen>
   );
 }

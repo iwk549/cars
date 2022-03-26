@@ -2,9 +2,8 @@ import client from "./client";
 
 const endpoint = "vehicles";
 
-export const models = [
-  { value: "hatchback", label: "Hatchback" },
-  { value: "sedan", label: "Sedan" },
+export const types = [
+  { value: "car", label: "Car" },
   { value: "truck", label: "Truck" },
 ];
 
@@ -16,7 +15,7 @@ export const makes = [
   { value: "toyota", label: "Toyota" },
 ];
 
-export const getCars = (model, make, year) => {
+export const getCars = (type, make, year) => {
   return client.get(
     endpoint +
       "/GetModelsForMakeYear/make/" +
@@ -24,7 +23,7 @@ export const getCars = (model, make, year) => {
       "/modelyear/" +
       year.value +
       "/vehicletype/" +
-      model.value +
+      type.value +
       "?format=json"
   );
 };
