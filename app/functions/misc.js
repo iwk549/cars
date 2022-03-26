@@ -1,4 +1,4 @@
-import { faker } from "@faker-js/faker";
+// import { faker } from "@faker-js/faker";
 
 const getYears = () => {
   let currentYear = new Date().getFullYear() + 1;
@@ -24,8 +24,10 @@ export const getRandomCarImage = () => {
 };
 
 export function generateRandomPrice() {
-  return `$${faker.finance.amount()}`;
+  return "$100.00";
+  // return `$${faker.finance.amount()}`;
 }
 export function generateRandomAddress() {
-  return `${faker.address.city()}, ${faker.address.stateAbbr()}`;
+  return "Costa Mesa, CA";
+  // return `${faker.address.city()}, ${faker.address.stateAbbr()}`;
 }
