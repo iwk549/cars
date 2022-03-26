@@ -1,6 +1,6 @@
 # cars
 
-# TO RUN
+# TO RUN LOCALLY
 npm install
 
 expo start
