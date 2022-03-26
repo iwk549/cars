@@ -6,7 +6,7 @@ import AppText from "../common/text/AppText";
 function NoneFound() {
   return (
     <AppText style={styles.text}>
-      No cars were found under the selected criteria
+      No vehicles were found under the selected criteria
     </AppText>
   );
 }

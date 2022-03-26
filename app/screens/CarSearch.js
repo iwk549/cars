@@ -2,20 +2,29 @@ import React, { useState, useEffect, useCallback } from "react";
 import { FlatList, StyleSheet, View } from "react-native";
 
 import { makes, types, getCars } from "../api/vehicles";
-import { getRandomCarImage, years } from "../functions/misc";
-import { PageHeader, Screen } from "../components";
-import CarInList from "../components/carSearch/CarInList";
-import NoneFound from "../components/carSearch/NoneFound";
-import SearchFilter from "../components/carSearch/SearchFilter";
-import ListItemSeparator from "../components/common/ListItemSeparator";
-import ModelModal from "../components/carSearch/ModelModal";
+import {
+  generateRandomPrice,
+  getRandomCarImage,
+  generateRandomAddress,
+  years,
+} from "../functions/misc";
+import {
+  PageTitle,
+  Screen,
+  ListItemSeparator,
+  CarInList,
+  NoneFound,
+  SearchFilter,
+  ModelModal,
+  PullToRefresh,
+} from "../components";
 
 function CarSearch() {
   const [refreshing, setRefreshing] = useState(false);
   const [filteredVehicles, setFilteredVehicles] = useState([]);
-  const [selectedType, setSelectedType] = useState(types[0]);
-  const [selectedMake, setSelectedMake] = useState(makes[0]);
-  const [selectedYear, setSelectedYear] = useState(years[0]);
+  const [selectedType, setSelectedType] = useState(null);
+  const [selectedMake, setSelectedMake] = useState(null);
+  const [selectedYear, setSelectedYear] = useState(null);
   const [selectedModel, setSelectedModel] = useState(null);
   const [visible, setVisible] = useState(false);
 
@@ -45,7 +54,10 @@ function CarSearch() {
       let data = [];
       res.data.Results.forEach((r) => {
         let result = { ...r };
-        result.image = getRandomCarImage();
+        result.image1 = getRandomCarImage();
+        result.image2 = getRandomCarImage();
+        result.dailyRate = generateRandomPrice();
+        result.location = generateRandomAddress();
         data.push(result);
       });
       setFilteredVehicles(data);
@@ -55,19 +67,19 @@ function CarSearch() {
 
   const filters = [
     {
-      title: "Type",
+      placeholder: "Type",
       options: types,
       onSelect: handleSelectType,
       selectedItem: selectedType,
     },
     {
-      title: "Make",
+      placeholder: "Make",
       options: makes,
       onSelect: handleSelectMake,
       selectedItem: selectedMake,
     },
     {
-      title: "Year",
+      placeholder: "Year",
       options: years,
       onSelect: handleSelectYear,
       selectedItem: selectedYear,
@@ -81,12 +93,13 @@ function CarSearch() {
 
   return (
     <Screen>
-      <PageHeader text="Filter Cars" />
+      <PageTitle text="Filter Cars" />
       <View style={styles.row}>
         {filters.map((f) => (
-          <View style={styles.third} key={f.title}>
+          <View style={styles.half} key={f.placeholder}>
             <SearchFilter
-              title={f.title}
+              placeholder={f.placeholder}
+              title={f.placeholder}
               options={f.options}
               onSelect={f.onSelect}
               selectedItem={f.selectedItem}
@@ -94,7 +107,7 @@ function CarSearch() {
           </View>
         ))}
       </View>
-      <PageHeader text="Select Model" />
+      <PullToRefresh />
       <FlatList
         data={filteredVehicles}
         keyExtractor={(v) => String(v.Model_ID)}
@@ -108,12 +121,13 @@ function CarSearch() {
         refreshing={refreshing}
         onRefresh={() => getData(selectedType, selectedMake, selectedYear)}
         ItemSeparatorComponent={ListItemSeparator}
-        ListEmptyComponent={<NoneFound />}
+        ListEmptyComponent={<NoneFound selectedType={selectedType} />}
       />
       <ModelModal
         model={selectedModel}
         visible={visible}
         setVisible={setVisible}
+        selectedType={selectedType}
       />
     </Screen>
   );
@@ -123,8 +137,8 @@ const styles = StyleSheet.create({
   row: {
     flexDirection: "row",
   },
-  third: {
-    flex: 1 / 3,
+  half: {
+    flex: 1 / 2,
   },
 });
 

@@ -3,6 +3,7 @@ import { StyleSheet, TouchableOpacity, View } from "react-native";
 
 import AppText from "../text/AppText";
 import { defaultStyles, clicks } from "../../../config";
+import IconRender from "../../icon/IconRender";
 
 function BlockButton({
   backgroundColor,
@@ -64,11 +65,9 @@ function BlockButton({
       {icon && (
         <IconRender
           icon={icon.icon}
-          iconType={icon.iconType}
-          iconSize={icon.iconSize}
-          hue={icon.hue}
+          size={icon.size}
+          color={icon.color}
           style={styles.buttonIcon}
-          suggestedColor={icon.suggestedColor}
         />
       )}
       <TouchableOpacity

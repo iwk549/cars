@@ -19,11 +19,11 @@ export const getCars = (type, make, year) => {
   return client.get(
     endpoint +
       "/GetModelsForMakeYear/make/" +
-      make.value +
+      make?.value +
       "/modelyear/" +
-      year.value +
+      year?.value +
       "/vehicletype/" +
-      type.value +
+      type?.value +
       "?format=json"
   );
 };

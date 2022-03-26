@@ -18,7 +18,7 @@ function AppPicker({ options, selectedOption, placeholder, title, onSelect }) {
   return (
     <>
       <BlockButton
-        title={title}
+        title={selectedOption?.label || placeholder}
         backgroundColor="primary"
         textColor="lightText"
         size="small"
@@ -37,13 +37,14 @@ function AppPicker({ options, selectedOption, placeholder, title, onSelect }) {
             backgroundColor="light"
             textColor="darkText"
             size="small"
+            icon={{ icon: "cancel", size: 15, color: "black" }}
           />
           <PageHeader text={"Select " + title} />
           {options.map((o, idx) => {
-            const isSelected = o.value === selectedOption.value;
+            const isSelected = o.value === selectedOption?.value;
             const itemStyle = idx % 2 === 0 ? {} : styles.oddItemStyle;
             return (
-              <>
+              <React.Fragment key={idx}>
                 <TouchableOpacity
                   style={[
                     styles.itemStyle,
@@ -65,7 +66,7 @@ function AppPicker({ options, selectedOption, placeholder, title, onSelect }) {
                   </AppText>
                 </TouchableOpacity>
                 <View style={{ height: 2 }} />
-              </>
+              </React.Fragment>
             );
           })}
         </ScrollView>
