@@ -1,3 +1,4 @@
 # cars
 
-Run with npm install, expo start
+Run with npm install
+expo start
