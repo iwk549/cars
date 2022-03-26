@@ -6,6 +6,7 @@ import {
   Image,
   View,
   Alert,
+  StatusBar,
 } from "react-native";
 import BlockButton from "../common/button/BlockButton";
 
@@ -77,6 +78,7 @@ const styles = StyleSheet.create({
     borderColor: "black",
     borderWidth: 1,
     margin: 5,
+    marginTop: StatusBar.currentHeight,
     borderRadius: 5,
   },
   image: {

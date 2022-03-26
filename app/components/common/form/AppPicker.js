@@ -5,6 +5,7 @@ import {
   Modal,
   ScrollView,
   View,
+  StatusBar,
 } from "react-native";
 
 import AppText from "../text/AppText";
@@ -90,6 +91,7 @@ const styles = StyleSheet.create({
     borderWidth: 1,
     margin: 5,
     borderRadius: 5,
+    marginTop: StatusBar.currentHeight,
   },
   oddItemStyle: {
     backgroundColor: defaultStyles.colors.muted,
