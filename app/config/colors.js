@@ -6,26 +6,9 @@ const muted = "#e6d2f9";
 const niceblue = "#0099ff";
 
 export default {
-  primary: "#733e0c",
+  primary: "#004d80",
   secondary: "#b36b00",
-  lightBG: "#f3e9fc",
-  darkBG: info,
-  dark: "#270943",
-  mutedBG: "#e6d2f9",
+  light: "#80ccff",
   lightText: "#fff",
   darkText: "#000",
-  mutedText: "#e6d2f9",
-  iconlight: "#f3e9fc",
-  icondark: "#663d00",
-  iconniceblue: niceblue,
-  iconpop: info,
-  iconwarning: warning,
-  icondanger: danger,
-  light: muted,
-  danger: danger,
-  warning: warning,
-  success: success,
-  iconsuccess: success,
-  niceblue,
-  info,
 };

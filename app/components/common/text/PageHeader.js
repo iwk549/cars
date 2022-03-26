@@ -1,7 +1,7 @@
 import React from "react";
 import { StyleSheet } from "react-native";
 
-import AppText from "../text/AppText";
+import AppText from "./AppText";
 
 function PageHeader({ text }) {
   return <AppText style={styles.headerText}>{text}</AppText>;
